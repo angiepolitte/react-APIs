@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./utils/api";
 
 import "./App.css";
-
-axios.interceptors.request.use((request) => {
-  console.log("Starting Request", request);
-  return request;
-});
-axios.interceptors.response.use((response) => {
-  console.log("Response", response);
-  return response;
-});
 
 function App() {
   const [data, setData] = useState();
@@ -23,12 +14,10 @@ function App() {
       userId: 1,
     };
 
-    axios
-      .post("https://jsonplaceholder.typicode.com/posts", newPost)
-      .then((response) => {
-        console.log("New Post Added: ", response.data);
-        setData([response.data]);
-      });
+    api.post("/posts", newPost).then((response) => {
+      console.log("New Post Added: ", response.data);
+      setData([response.data]);
+    });
   };
   return (
     <>
@@ -145,3 +134,14 @@ export default App;
 //     </>
 //   );
 // }
+
+// interceptors
+
+// axios.interceptors.request.use((request) => {
+//   console.log("Starting Request", request);
+//   return request;
+// });
+// axios.interceptors.response.use((response) => {
+//   console.log("Response", response);
+//   return response;
+// });
