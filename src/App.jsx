@@ -11,13 +11,19 @@ function App() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => {
-        console.log(response);
-        setData(response.data);
-        setLoading(false);
-        // throw new Error("Something went wrong!");
-      })
+      .all([
+        axios.get("https://jsonplaceholder.typicode.com/posts"),
+        axios.get("https://jsonplaceholder.typicode.com/users"),
+      ])
+      .then(
+        axios.spread((posts, users) => {
+          console.log(posts);
+          console.log(users);
+          setData(posts.data);
+          setLoading(false);
+          // throw new Error("Something went wrong!");
+        })
+      )
       .catch((error) => {
         console.error("Error fetching data: ", error);
         setError("Failed to fetch data");
@@ -31,29 +37,6 @@ function App() {
   if (error) {
     return <p>{error}</p>;
   }
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch("https://jsonplaceholder.typicode.com/posts")
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       setData(json);
-  //       setLoading(false);
-  //       // throw new Error("Something went wrong!");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data: ", error);
-  //       setError("Failed to fetch data");
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
 
   return (
     <>
@@ -75,3 +58,54 @@ function App() {
 }
 
 export default App;
+
+// axios.get
+
+//  useEffect(() => {
+//     setLoading(true);
+//     axios
+//       .get("https://jsonplaceholder.typicode.com/posts")
+//       .then((response) => {
+//         console.log(response);
+//         setData(response.data);
+//         setLoading(false);
+//         // throw new Error("Something went wrong!");
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching data: ", error);
+//         setError("Failed to fetch data");
+//         setLoading(false);
+//       });
+//   }, []);
+
+//   if (loading) {
+//     return <p>Loading...</p>;
+//   }
+//   if (error) {
+//     return <p>{error}</p>;
+//   }
+
+//fetch
+
+// useEffect(() => {
+//   setLoading(true);
+//   fetch("https://jsonplaceholder.typicode.com/posts")
+//     .then((response) => response.json())
+//     .then((json) => {
+//       setData(json);
+//       setLoading(false);
+//       // throw new Error("Something went wrong!");
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching data: ", error);
+//       setError("Failed to fetch data");
+//       setLoading(false);
+//     });
+// }, []);
+
+// if (loading) {
+//   return <p>Loading...</p>;
+// }
+// if (error) {
+//   return <p>{error}</p>;
+// }
